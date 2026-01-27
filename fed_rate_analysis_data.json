@@ -1,0 +1,38 @@
+{
+  "analysis_date": "2026-01-27",
+  "current_rate": 3.625,
+  "recommendation": "HOLD",
+  "confidence": "HIGH",
+  "economic_data": {
+    "inflation": {
+      "cpi_headline": 2.7,
+      "cpi_core": 2.6,
+      "pce_estimate": 2.36,
+      "target": 2.0
+    },
+    "labor_market": {
+      "unemployment_rate": 4.4,
+      "nairu": 4.2,
+      "monthly_job_gains": 50000
+    },
+    "gdp": {
+      "q4_2025_estimate": 3.2,
+      "forecast_2026": 2.2,
+      "potential": 2.0
+    }
+  },
+  "taylor_rules": {
+    "original": {
+      "prescribed_rate": 5.09,
+      "implied_action": "RAISE"
+    },
+    "balanced": {
+      "prescribed_rate": 4.89,
+      "implied_action": "RAISE"
+    },
+    "inertial": {
+      "prescribed_rate": 3.84,
+      "implied_action": "RAISE"
+    }
+  }
+}
