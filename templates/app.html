@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_name }} - Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="app-body">
+    <!-- App Navigation -->
+    <nav class="app-nav">
+        <div class="app-nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">🎵</span>
+                <span class="logo-text">MasterFlow</span>
+            </a>
+            <div class="app-nav-links">
+                <a href="#" class="nav-link active">Dashboard</a>
+                <a href="#" class="nav-link">My Tracks</a>
+                <a href="#" class="nav-link">History</a>
+            </div>
+            <div class="app-nav-user">
+                <span class="credits-badge">1 Credit</span>
+                <div class="user-avatar">JD</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main App Container -->
+    <main class="app-main">
+        <div class="app-container">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="upload-zone" id="uploadZone">
+                    <div class="upload-content">
+                        <div class="upload-icon">📁</div>
+                        <h2>Drop your track here</h2>
+                        <p>or click to browse</p>
+                        <p class="upload-formats">Supports WAV, MP3, FLAC, AIFF, OGG, M4A (up to 500MB)</p>
+                    </div>
+                    <input type="file" id="fileInput" accept=".wav,.mp3,.flac,.aiff,.ogg,.m4a" hidden>
+                </div>
+            </section>
+
+            <!-- Track Info (shown after upload) -->
+            <section class="track-section" id="trackSection" style="display: none;">
+                <div class="track-card">
+                    <div class="track-info">
+                        <div class="track-waveform" id="waveform">
+                            <div class="waveform-placeholder">Loading waveform...</div>
+                        </div>
+                        <div class="track-details">
+                            <h3 id="trackTitle">Track Name</h3>
+                            <div class="track-meta">
+                                <span id="trackDuration">0:00</span>
+                                <span id="trackSampleRate">44.1 kHz</span>
+                                <span id="trackChannels">Stereo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analysis Results -->
+                    <div class="analysis-section" id="analysisSection">
+                        <h4>Audio Analysis</h4>
+                        <div class="analysis-grid">
+                            <div class="analysis-item">
+                                <span class="analysis-label">Loudness</span>
+                                <span class="analysis-value" id="analysisLufs">-14.0 LUFS</span>
+                            </div>
+                            <div class="analysis-item">
+                                <span class="analysis-label">Peak</span>
+                                <span class="analysis-value" id="analysisPeak">-3.2 dB</span>
+                            </div>
+                            <div class="analysis-item">
+                                <span class="analysis-label">Dynamic Range</span>
+                                <span class="analysis-value" id="analysisDR">12.5 dB</span>
+                            </div>
+                            <div class="analysis-item">
+                                <span class="analysis-label">Spectral Balance</span>
+                                <span class="analysis-value" id="analysisBalance">Balanced</span>
+                            </div>
+                        </div>
+                        <div class="recommendation-box">
+                            <span class="recommendation-icon">💡</span>
+                            <span id="recommendationText">Recommended preset: <strong>Balanced</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mastering Settings -->
+            <section class="settings-section" id="settingsSection" style="display: none;">
+                <div class="settings-card">
+                    <h3>Mastering Settings</h3>
+
+                    <!-- Preset Selection -->
+                    <div class="setting-group">
+                        <label>Preset</label>
+                        <div class="preset-grid">
+                            <button class="preset-btn active" data-preset="balanced">
+                                <span class="preset-icon">⚖️</span>
+                                <span class="preset-name">Balanced</span>
+                                <span class="preset-desc">Neutral, transparent</span>
+                            </button>
+                            <button class="preset-btn" data-preset="warm">
+                                <span class="preset-icon">🔥</span>
+                                <span class="preset-name">Warm</span>
+                                <span class="preset-desc">Rich lows, smooth highs</span>
+                            </button>
+                            <button class="preset-btn" data-preset="bright">
+                                <span class="preset-icon">✨</span>
+                                <span class="preset-name">Bright</span>
+                                <span class="preset-desc">Crisp, clear presence</span>
+                            </button>
+                            <button class="preset-btn" data-preset="punchy">
+                                <span class="preset-icon">👊</span>
+                                <span class="preset-name">Punchy</span>
+                                <span class="preset-desc">Aggressive, impactful</span>
+                            </button>
+                            <button class="preset-btn" data-preset="gentle">
+                                <span class="preset-icon">🌙</span>
+                                <span class="preset-name">Gentle</span>
+                                <span class="preset-desc">Subtle enhancement</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Genre Selection -->
+                    <div class="setting-group">
+                        <label>Genre Optimization (Optional)</label>
+                        <select id="genreSelect" class="select-input">
+                            <option value="">Auto-detect</option>
+                            <option value="edm">EDM / Electronic</option>
+                            <option value="hiphop">Hip-Hop / Rap</option>
+                            <option value="rock">Rock</option>
+                            <option value="pop">Pop</option>
+                            <option value="rnb">R&B / Soul</option>
+                            <option value="jazz">Jazz</option>
+                            <option value="classical">Classical</option>
+                            <option value="metal">Metal</option>
+                            <option value="acoustic">Acoustic</option>
+                            <option value="electronic">Electronic</option>
+                        </select>
+                    </div>
+
+                    <!-- Target Loudness -->
+                    <div class="setting-group">
+                        <label>Target Loudness</label>
+                        <div class="loudness-presets">
+                            <button class="loudness-btn" data-lufs="-16">
+                                YouTube<br><small>-16 LUFS</small>
+                            </button>
+                            <button class="loudness-btn active" data-lufs="-14">
+                                Spotify<br><small>-14 LUFS</small>
+                            </button>
+                            <button class="loudness-btn" data-lufs="-11">
+                                Club<br><small>-11 LUFS</small>
+                            </button>
+                            <button class="loudness-btn" data-lufs="-9">
+                                Loud<br><small>-9 LUFS</small>
+                            </button>
+                        </div>
+                        <div class="slider-group">
+                            <input type="range" id="lufsSlider" min="-20" max="-6" value="-14" step="0.5">
+                            <span id="lufsValue">-14 LUFS</span>
+                        </div>
+                    </div>
+
+                    <!-- Output Format -->
+                    <div class="setting-group">
+                        <label>Output Format</label>
+                        <div class="format-grid">
+                            <button class="format-btn active" data-format="wav">
+                                <span class="format-name">WAV</span>
+                                <span class="format-desc">Lossless, 24-bit</span>
+                            </button>
+                            <button class="format-btn" data-format="flac">
+                                <span class="format-name">FLAC</span>
+                                <span class="format-desc">Lossless, compressed</span>
+                            </button>
+                            <button class="format-btn" data-format="mp3">
+                                <span class="format-name">MP3</span>
+                                <span class="format-desc">320 kbps</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Settings Toggle -->
+                    <div class="advanced-toggle">
+                        <button id="advancedToggle" class="toggle-btn">
+                            Advanced Settings <span class="toggle-icon">▼</span>
+                        </button>
+                    </div>
+
+                    <!-- Advanced Settings -->
+                    <div class="advanced-settings" id="advancedSettings" style="display: none;">
+                        <div class="setting-group">
+                            <label>EQ Adjustments</label>
+                            <div class="eq-sliders">
+                                <div class="eq-slider">
+                                    <span>Low</span>
+                                    <input type="range" id="eqLow" min="-6" max="6" value="0" step="0.5">
+                                    <span id="eqLowValue">0 dB</span>
+                                </div>
+                                <div class="eq-slider">
+                                    <span>Mid</span>
+                                    <input type="range" id="eqMid" min="-6" max="6" value="0" step="0.5">
+                                    <span id="eqMidValue">0 dB</span>
+                                </div>
+                                <div class="eq-slider">
+                                    <span>High</span>
+                                    <input type="range" id="eqHigh" min="-6" max="6" value="0" step="0.5">
+                                    <span id="eqHighValue">0 dB</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="setting-group">
+                            <label>Stereo Width</label>
+                            <input type="range" id="stereoWidth" min="0" max="2" value="1" step="0.1">
+                            <span id="stereoWidthValue">100%</span>
+                        </div>
+                    </div>
+
+                    <!-- Master Button -->
+                    <div class="master-action">
+                        <button id="masterBtn" class="btn btn-primary btn-large btn-full">
+                            <span class="btn-text">Master This Track</span>
+                            <span class="btn-price">1 Credit</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Processing Section -->
+            <section class="processing-section" id="processingSection" style="display: none;">
+                <div class="processing-card">
+                    <div class="processing-animation">
+                        <div class="processing-ring"></div>
+                        <div class="processing-icon">🎛️</div>
+                    </div>
+                    <h3>Mastering Your Track</h3>
+                    <p id="processingStatus">Analyzing audio...</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                    </div>
+                    <span class="progress-text" id="progressText">0%</span>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-card">
+                    <div class="results-header">
+                        <div class="success-icon">✅</div>
+                        <h3>Mastering Complete!</h3>
+                    </div>
+
+                    <!-- Before/After Comparison -->
+                    <div class="comparison-player">
+                        <div class="comparison-header">
+                            <button class="compare-btn active" data-type="before">Before</button>
+                            <button class="compare-btn" data-type="after">After</button>
+                        </div>
+                        <div class="audio-player">
+                            <button class="play-btn" id="playBtn">▶</button>
+                            <div class="player-progress">
+                                <div class="player-progress-fill" id="playerProgress" style="width: 0%"></div>
+                            </div>
+                            <span class="player-time" id="playerTime">0:00 / 0:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Results Stats -->
+                    <div class="results-stats">
+                        <div class="stat-card">
+                            <span class="stat-label">Input LUFS</span>
+                            <span class="stat-value" id="resultInputLufs">-18.5</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Output LUFS</span>
+                            <span class="stat-value" id="resultOutputLufs">-14.0</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Gain Applied</span>
+                            <span class="stat-value" id="resultGain">+4.5 dB</span>
+                        </div>
+                    </div>
+
+                    <!-- Download Buttons -->
+                    <div class="download-actions">
+                        <button class="btn btn-primary btn-large" id="downloadBtn">
+                            📥 Download Mastered Track
+                        </button>
+                        <button class="btn btn-outline" id="newTrackBtn">
+                            🎵 Master Another Track
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
