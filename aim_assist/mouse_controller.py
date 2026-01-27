@@ -6,12 +6,7 @@ Uses relative mouse movement for game compatibility.
 import time
 import math
 from typing import Optional
-import pyautogui
-
-# Disable PyAutoGUI's fail-safe (moving mouse to corner stops program)
-# Keep enabled during development, disable for actual use
-pyautogui.FAILSAFE = True
-pyautogui.PAUSE = 0  # Remove default pause between actions
+from pynput.mouse import Controller as MouseControllerBackend
 
 
 class MouseController:
@@ -35,6 +30,7 @@ class MouseController:
         self.smoothing = smoothing
         self.max_speed = max_speed
         self.deadzone = deadzone
+        self._mouse = MouseControllerBackend()
 
         # For smoothing calculations
         self._last_move_x = 0.0
@@ -102,20 +98,19 @@ class MouseController:
         self._last_move_x = move_x
         self._last_move_y = move_y
 
-        # Perform relative mouse move
-        # Using pyautogui.move for relative movement
+        # Perform relative mouse move using pynput
         int_move_x = int(round(move_x))
         int_move_y = int(round(move_y))
 
         if int_move_x != 0 or int_move_y != 0:
-            pyautogui.move(int_move_x, int_move_y, _pause=False)
+            self._mouse.move(int_move_x, int_move_y)
             return True
 
         return False
 
     def move_relative(self, dx: int, dy: int):
         """Direct relative mouse movement without smoothing."""
-        pyautogui.move(dx, dy, _pause=False)
+        self._mouse.move(dx, dy)
 
     def reset_smoothing(self):
         """Reset smoothing state (call when toggling aim assist off/on)."""
@@ -229,12 +224,12 @@ class AdvancedMouseController(MouseController):
         if len(self._target_history) > self._max_history:
             self._target_history.pop(0)
 
-        # Perform movement
+        # Perform movement using pynput
         int_move_x = int(round(move_x))
         int_move_y = int(round(move_y))
 
         if int_move_x != 0 or int_move_y != 0:
-            pyautogui.move(int_move_x, int_move_y, _pause=False)
+            self._mouse.move(int_move_x, int_move_y)
             return True
 
         return False
