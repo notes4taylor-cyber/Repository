@@ -37,7 +37,7 @@ class AimAssistConfig:
     fov_limit: int = 150  # Max distance to lock onto targets
 
     # Activation settings
-    activation_key: str = "shift"  # Hold to activate (shift, ctrl, alt, or mouse button)
+    activation_key: str = "right_click"  # Hold to activate (right_click, shift, ctrl, alt, mouse4, mouse5)
     toggle_key: str = "capslock"  # Toggle aim assist on/off
     exit_key: str = "end"  # Exit the program
 

@@ -137,11 +137,17 @@ class AimAssist:
     def _on_mouse_click(self, x, y, button, pressed):
         """Handle mouse button events for activation."""
         activation = self.config.activation_key.lower()
-
-        # Check if activation is a mouse button
         button_name = button.name.lower() if hasattr(button, 'name') else str(button)
 
-        if activation in ("mouse4", "mouse5", "x1", "x2"):
+        # Right click activation
+        if activation == "right_click":
+            if button_name == "right":
+                self._activation_key_held = pressed
+                if not pressed:
+                    self.mouse_controller.reset_smoothing()
+
+        # Side mouse button activation (mouse4/mouse5)
+        elif activation in ("mouse4", "mouse5", "x1", "x2"):
             if button_name in ("x1", "x2", "button8", "button9"):
                 self._activation_key_held = pressed
                 if not pressed:

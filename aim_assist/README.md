@@ -60,7 +60,8 @@ python aim_assist.py --sensitivity 1.2
 
 | Key | Action |
 |-----|--------|
-| `Shift` (hold) | Activate aim assist |
+| `Right Click` (hold) | Activate aim assist (ADS style) |
+| `Left Click` | Fire (handled by game) |
 | `CapsLock` | Toggle aim assist on/off |
 | `End` | Exit program |
 
@@ -80,7 +81,7 @@ Edit `aim_config.json` or use command line arguments:
   "aim_at_head": true,
   "head_offset_ratio": 0.35,
   "fov_limit": 150,
-  "activation_key": "shift",
+  "activation_key": "right_click",
   "debug_mode": false
 }
 ```
