@@ -1,6 +1,7 @@
 """
 Main aim assist controller.
 Combines screen capture, target detection, and mouse control into a cohesive system.
+Supports both color-based and motion-based detection.
 """
 
 import time
@@ -8,10 +9,11 @@ import threading
 import cv2
 import numpy as np
 from pynput import keyboard, mouse
-from typing import Optional
+from typing import Optional, Union
 
 from screen_capture import ScreenCapture
-from target_detector import TargetDetector, ColorRange, COLOR_PRESETS
+from target_detector import TargetDetector, ColorRange, COLOR_PRESETS, Target
+from motion_detector import MotionDetector, MovingTarget
 from mouse_controller import AdvancedMouseController
 from config import AimAssistConfig
 
@@ -33,10 +35,17 @@ class AimAssist:
             monitor_index=self.config.monitor_index,
         )
 
-        self.target_detector = TargetDetector(
+        # Initialize detectors based on mode
+        self.color_detector = TargetDetector(
             color_ranges=self._get_color_ranges(),
             min_area=self.config.min_target_area,
             max_area=self.config.max_target_area,
+        )
+
+        self.motion_detector = MotionDetector(
+            min_area=self.config.min_target_area,
+            max_area=self.config.max_target_area,
+            motion_threshold=self.config.motion_threshold,
         )
 
         self.mouse_controller = AdvancedMouseController(
@@ -85,6 +94,27 @@ class AimAssist:
 
         # Default to red
         return [COLOR_PRESETS["red"], COLOR_PRESETS["red_alt"]]
+
+    def _detect_target(self, frame: np.ndarray) -> Optional[Union[Target, MovingTarget]]:
+        """Detect target using configured detection mode."""
+        if self.config.detection_mode == "motion":
+            return self.motion_detector.detect_closest(frame)
+        else:
+            return self.color_detector.detect_closest(frame)
+
+    def _detect_all_targets(self, frame: np.ndarray) -> list:
+        """Detect all targets using configured detection mode."""
+        if self.config.detection_mode == "motion":
+            return self.motion_detector.detect(frame)
+        else:
+            return self.color_detector.detect(frame)
+
+    def _get_debug_frame(self, frame: np.ndarray, targets: list) -> np.ndarray:
+        """Get debug visualization using configured detection mode."""
+        if self.config.detection_mode == "motion":
+            return self.motion_detector.get_debug_frame(frame, targets)
+        else:
+            return self.color_detector.get_debug_frame(frame, targets)
 
     def _on_key_press(self, key):
         """Handle key press events."""
@@ -145,6 +175,8 @@ class AimAssist:
                 self._activation_key_held = pressed
                 if not pressed:
                     self.mouse_controller.reset_smoothing()
+                    # Reset motion detector when releasing to clear history
+                    self.motion_detector.reset()
 
         # Side mouse button activation (mouse4/mouse5)
         elif activation in ("mouse4", "mouse5", "x1", "x2"):
@@ -152,6 +184,7 @@ class AimAssist:
                 self._activation_key_held = pressed
                 if not pressed:
                     self.mouse_controller.reset_smoothing()
+                    self.motion_detector.reset()
 
     def _main_loop(self):
         """Main aim assist loop."""
@@ -167,8 +200,8 @@ class AimAssist:
                 # Capture screen
                 frame = self.screen_capture.capture()
 
-                # Detect target
-                target = self.target_detector.detect_closest(frame)
+                # Detect target using configured mode
+                target = self._detect_target(frame)
 
                 if target:
                     # Calculate offset from center
@@ -189,13 +222,14 @@ class AimAssist:
 
                 # Debug visualization
                 if self.config.debug_mode:
-                    targets = self.target_detector.detect(frame)
-                    debug_frame = self.target_detector.get_debug_frame(frame, targets)
+                    targets = self._detect_all_targets(frame)
+                    debug_frame = self._get_debug_frame(frame, targets)
 
                     if self.config.show_fps:
+                        mode_str = self.config.detection_mode.upper()
                         cv2.putText(
                             debug_frame,
-                            f"FPS: {self.fps:.0f}",
+                            f"FPS: {self.fps:.0f} | Mode: {mode_str}",
                             (10, 20),
                             cv2.FONT_HERSHEY_SIMPLEX,
                             0.5,
@@ -205,7 +239,7 @@ class AimAssist:
                         status = "ACTIVE" if self.active else "STANDBY"
                         cv2.putText(
                             debug_frame,
-                            f"Status: {status}",
+                            f"Status: {status} | Targets: {len(targets)}",
                             (10, 40),
                             cv2.FONT_HERSHEY_SIMPLEX,
                             0.5,
@@ -221,11 +255,25 @@ class AimAssist:
             elif self.config.debug_mode:
                 # Show standby frame in debug mode
                 frame = self.screen_capture.capture()
-                debug_frame = frame.copy()
+
+                # Still run detection to show what would be detected
+                targets = self._detect_all_targets(frame)
+                debug_frame = self._get_debug_frame(frame, targets)
+
+                mode_str = self.config.detection_mode.upper()
                 cv2.putText(
                     debug_frame,
-                    f"FPS: {self.fps:.0f} | STANDBY (hold {self.config.activation_key})",
+                    f"FPS: {self.fps:.0f} | Mode: {mode_str} | STANDBY (hold {self.config.activation_key})",
                     (10, 20),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    0.5,
+                    (0, 165, 255),
+                    1,
+                )
+                cv2.putText(
+                    debug_frame,
+                    f"Targets: {len(targets)}",
+                    (10, 40),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     0.5,
                     (0, 165, 255),
@@ -255,6 +303,7 @@ class AimAssist:
             return
 
         print("[AimAssist] Starting...")
+        print(f"[AimAssist] Detection mode: {self.config.detection_mode.upper()}")
         print(f"[AimAssist] Hold '{self.config.activation_key}' to activate")
         print(f"[AimAssist] Press '{self.config.toggle_key}' to toggle on/off")
         print(f"[AimAssist] Press '{self.config.exit_key}' to exit")
@@ -314,9 +363,13 @@ class AimAssist:
             config.capture_height,
         )
 
-        self.target_detector.set_color_ranges(self._get_color_ranges())
-        self.target_detector.min_area = config.min_target_area
-        self.target_detector.max_area = config.max_target_area
+        self.color_detector.set_color_ranges(self._get_color_ranges())
+        self.color_detector.min_area = config.min_target_area
+        self.color_detector.max_area = config.max_target_area
+
+        self.motion_detector.min_area = config.min_target_area
+        self.motion_detector.max_area = config.max_target_area
+        self.motion_detector.motion_threshold = config.motion_threshold
 
         self.mouse_controller.set_sensitivity(config.sensitivity)
         self.mouse_controller.set_smoothing(config.smoothing)
@@ -332,8 +385,10 @@ def main():
     parser = argparse.ArgumentParser(description="Vision-based aim assist")
     parser.add_argument("--config", "-c", type=str, help="Path to config file")
     parser.add_argument("--debug", "-d", action="store_true", help="Enable debug mode")
+    parser.add_argument("--mode", "-m", type=str, choices=["color", "motion"], help="Detection mode")
     parser.add_argument("--color", type=str, help="Target color preset (red, yellow, green, etc.)")
     parser.add_argument("--sensitivity", "-s", type=float, help="Aim sensitivity (0.1-5.0)")
+    parser.add_argument("--threshold", "-t", type=int, help="Motion threshold (lower = more sensitive)")
 
     args = parser.parse_args()
 
@@ -346,10 +401,14 @@ def main():
     # Apply command line overrides
     if args.debug:
         config.debug_mode = True
+    if args.mode:
+        config.detection_mode = args.mode
     if args.color:
         config.target_color = args.color
     if args.sensitivity:
         config.sensitivity = args.sensitivity
+    if args.threshold:
+        config.motion_threshold = args.threshold
 
     # Create and run
     aim_assist = AimAssist(config)

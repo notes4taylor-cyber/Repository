@@ -19,11 +19,13 @@ class AimAssistConfig:
     monitor_index: int = 1  # Monitor to capture (1 = primary)
 
     # Target detection settings
-    target_color: str = "red"  # Color preset name or "custom"
+    detection_mode: str = "motion"  # "color" or "motion"
+    target_color: str = "red"  # Color preset name or "custom" (for color mode)
     custom_hsv_lower: tuple[int, int, int] = (0, 100, 100)  # For custom color
     custom_hsv_upper: tuple[int, int, int] = (10, 255, 255)  # For custom color
-    min_target_area: int = 50  # Minimum pixel area to consider
+    min_target_area: int = 100  # Minimum pixel area to consider
     max_target_area: int = 50000  # Maximum pixel area to consider
+    motion_threshold: int = 25  # Sensitivity for motion detection (lower = more sensitive)
 
     # Mouse control settings
     sensitivity: float = 0.8  # Aim speed multiplier (0.1 - 5.0)
@@ -55,11 +57,13 @@ class AimAssistConfig:
             "capture_width": self.capture_width,
             "capture_height": self.capture_height,
             "monitor_index": self.monitor_index,
+            "detection_mode": self.detection_mode,
             "target_color": self.target_color,
             "custom_hsv_lower": list(self.custom_hsv_lower),
             "custom_hsv_upper": list(self.custom_hsv_upper),
             "min_target_area": self.min_target_area,
             "max_target_area": self.max_target_area,
+            "motion_threshold": self.motion_threshold,
             "sensitivity": self.sensitivity,
             "smoothing": self.smoothing,
             "max_speed": self.max_speed,
@@ -91,11 +95,13 @@ class AimAssistConfig:
             capture_width=config_dict.get("capture_width", 320),
             capture_height=config_dict.get("capture_height", 320),
             monitor_index=config_dict.get("monitor_index", 1),
+            detection_mode=config_dict.get("detection_mode", "motion"),
             target_color=config_dict.get("target_color", "red"),
             custom_hsv_lower=tuple(config_dict.get("custom_hsv_lower", [0, 100, 100])),
             custom_hsv_upper=tuple(config_dict.get("custom_hsv_upper", [10, 255, 255])),
-            min_target_area=config_dict.get("min_target_area", 50),
+            min_target_area=config_dict.get("min_target_area", 100),
             max_target_area=config_dict.get("max_target_area", 50000),
+            motion_threshold=config_dict.get("motion_threshold", 25),
             sensitivity=config_dict.get("sensitivity", 0.8),
             smoothing=config_dict.get("smoothing", 0.3),
             max_speed=config_dict.get("max_speed", 80),
