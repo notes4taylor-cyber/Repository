@@ -1,0 +1,19 @@
+title: The Public Desk
+description: Independent news and journalism
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site
+
+# Build settings
+markdown: kramdown
+permalink: /stories/:title/
+
+# Collections for news stories
+collections:
+  posts:
+    output: true
+    permalink: /stories/:title/
+
+# Exclude files from build
+exclude:
+  - README.md
+  - superbowl_prediction.py

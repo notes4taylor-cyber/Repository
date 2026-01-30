@@ -1,0 +1,23 @@
+---
+layout: default
+title: Home
+---
+
+<h1 style="text-align: center; margin-bottom: 40px; border-bottom: 2px solid #c9a227; padding-bottom: 15px;">Latest News</h1>
+
+{% assign sorted_posts = site.posts | sort: 'date' | reverse %}
+
+{% if sorted_posts.size > 0 %}
+    {% for post in sorted_posts %}
+    <article class="story-card">
+        <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+        <p class="story-meta">{{ post.date | date: "%B %d, %Y" }}{% if post.author %} • By {{ post.author }}{% endif %}</p>
+        <p class="story-excerpt">{{ post.excerpt | strip_html | truncate: 200 }}</p>
+    </article>
+    {% endfor %}
+{% else %}
+    <div class="no-stories">
+        <h2>No stories yet</h2>
+        <p>Check back soon for the latest news.</p>
+    </div>
+{% endif %}

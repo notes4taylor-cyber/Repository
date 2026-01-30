@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Georgia, 'Times New Roman', serif;
+            line-height: 1.6;
+            color: #1a3a5c;
+            background-color: #fafafa;
+        }
+
+        header {
+            background-color: #ffffff;
+            border-bottom: 3px solid #1a3a5c;
+            padding: 20px 0;
+        }
+
+        .header-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+
+        .logo {
+            max-width: 300px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        nav {
+            margin-top: 15px;
+        }
+
+        nav a {
+            color: #1a3a5c;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid transparent;
+            transition: border-color 0.3s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            border-bottom-color: #c9a227;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            min-height: 60vh;
+        }
+
+        footer {
+            background-color: #1a3a5c;
+            color: #ffffff;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 60px;
+        }
+
+        footer p {
+            font-size: 0.9rem;
+        }
+
+        h1, h2, h3 {
+            color: #1a3a5c;
+            margin-bottom: 20px;
+        }
+
+        a {
+            color: #1a3a5c;
+        }
+
+        /* Story cards on home page */
+        .story-card {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-left: 4px solid #c9a227;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: box-shadow 0.3s;
+        }
+
+        .story-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .story-card h2 {
+            margin-bottom: 10px;
+        }
+
+        .story-card h2 a {
+            text-decoration: none;
+        }
+
+        .story-card h2 a:hover {
+            text-decoration: underline;
+        }
+
+        .story-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .story-excerpt {
+            color: #444;
+        }
+
+        /* Individual story page */
+        .story-content {
+            background: #ffffff;
+            padding: 40px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .story-content h1 {
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+
+        .story-content p {
+            margin-bottom: 1.5em;
+        }
+
+        .story-content img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+        }
+
+        /* About page */
+        .about-content {
+            background: #ffffff;
+            padding: 40px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .about-content p {
+            margin-bottom: 1.5em;
+            font-size: 1.1rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            color: #1a3a5c;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .no-stories {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="{{ '/' | relative_url }}">
+                <img src="{{ '/assets/images/logo.png' | relative_url }}" alt="The Public Desk" class="logo">
+            </a>
+            <nav>
+                <a href="{{ '/' | relative_url }}" {% if page.url == '/' %}class="active"{% endif %}>Home</a>
+                <a href="{{ '/about' | relative_url }}" {% if page.url == '/about/' or page.url == '/about' %}class="active"{% endif %}>About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {{ content }}
+    </main>
+
+    <footer>
+        <p>&copy; {{ 'now' | date: "%Y" }} The Public Desk. All rights reserved.</p>
+    </footer>
+</body>
+</html>
