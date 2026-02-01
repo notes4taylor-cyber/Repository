@@ -26,7 +26,7 @@ echo [3/3] Installing dependencies...
 pip install --upgrade pip
 pip install fastapi==0.115.0 uvicorn[standard] python-multipart jinja2
 pip install numpy scipy pydub soundfile
-pip install sqlalchemy==2.0.36 aiosqlite
+pip install greenlet sqlalchemy==2.0.36 aiosqlite
 pip install python-jose[cryptography] passlib[bcrypt]
 pip install python-dotenv aiofiles
 pip install pydantic-settings email-validator
