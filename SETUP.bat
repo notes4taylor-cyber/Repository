@@ -23,11 +23,12 @@ echo [2/3] Activating virtual environment...
 call venv\Scripts\activate.bat
 
 echo [3/3] Installing dependencies...
-pip install fastapi==0.109.0 uvicorn[standard]==0.27.0 python-multipart==0.0.6 jinja2==3.1.3
-pip install numpy==1.26.3 scipy==1.12.0 pydub==0.25.1 soundfile==0.12.1
-pip install sqlalchemy==2.0.25 aiosqlite==0.19.0
-pip install python-jose[cryptography]==3.3.0 passlib[bcrypt]==1.7.4
-pip install python-dotenv==1.0.0 aiofiles==23.2.1
+pip install --upgrade pip
+pip install fastapi==0.115.0 uvicorn[standard] python-multipart jinja2
+pip install numpy scipy pydub soundfile
+pip install sqlalchemy==2.0.36 aiosqlite
+pip install python-jose[cryptography] passlib[bcrypt]
+pip install python-dotenv aiofiles
 pip install pydantic-settings email-validator
 
 echo.
