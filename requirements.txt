@@ -1,0 +1,10 @@
+# PropertyFlow - Property Management Automation
+# No external dependencies required - uses Python 3.8+ standard library only!
+
+# Optional dependencies for enhanced functionality:
+# sendgrid>=6.9.0          # For real email delivery
+# twilio>=8.0.0            # For real SMS delivery
+# sqlalchemy>=2.0.0        # For database persistence
+# fastapi>=0.100.0         # For REST API
+# uvicorn>=0.23.0          # For API server
+# jinja2>=3.1.0            # For advanced templating
