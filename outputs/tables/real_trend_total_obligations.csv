@@ -1,0 +1,2 @@
+metric,first_year,first_busd,last_year,last_busd,cumulative_growth_pct,cagr_pct,trend_annual_growth_pct,trend_p_value,trend_ci80,r2,n
+Total federal contract obligations,2015,438.0,2024,755.0,72.4,6.24,6.35,0.0,"[5.6%, 7.1%]",0.959,9
