@@ -1,11 +1,19 @@
 # Builds the Vite app and deploys the static `dist/` output to GitHub Pages.
-# Runs automatically on every push to the game branch, and can be triggered
-# manually from the Actions tab.
+#
+# NOTE: This is currently MANUAL-ONLY (workflow_dispatch). GitHub Pages can't
+# publish from a PRIVATE repo on the free plan, so auto-running on every push
+# would just fail repeatedly. To turn on automatic deploys later, EITHER make
+# the repo public OR upgrade to GitHub Pro, then add a `push:` trigger back:
+#
+#   on:
+#     push:
+#       branches: [claude/peaceful-edison-uotxx9]
+#     workflow_dispatch:
+#
+# (You'll also need Settings -> Pages -> Source: "GitHub Actions".)
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [claude/peaceful-edison-uotxx9]
   workflow_dispatch:
 
 # Permissions the GITHUB_TOKEN needs to publish to Pages.
