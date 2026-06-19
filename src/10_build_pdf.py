@@ -106,7 +106,7 @@ def main() -> None:
         fig.text(0.08, 0.40, "• Outsourced-BD demand is measured via documented proxies — this is",
                  fontsize=11)
         fig.text(0.095, 0.375, "descriptive/associational, not causal. See Limitations.", fontsize=11)
-        fig.text(0.08, 0.12, "Prepared by: Senior econometrics research assistant (Claude)\n"
+        fig.text(0.08, 0.12, "Prepared by: Taylor Nguyen\n"
                  "Method: GAO Snapshot of Government-Wide Contracting + transparent proxy framework\n"
                  "Data provenance: data/raw/SOURCES.md   |   Reproduce: README.md",
                  fontsize=9, color="#666666")
