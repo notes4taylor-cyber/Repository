@@ -13,7 +13,7 @@ There is **no public dataset that directly measures "spending on outsourced GovC
 
 Therefore this project **cannot directly measure the dependent variable.** Everything that follows is an exercise in building **defensible, transparent proxies** for *demand* for these services and triangulating across several independent proxies. The single most important discipline in this project is to never let a proxy quietly become "the truth." Every proxy is named, justified, and its weaknesses documented.
 
-This is a **descriptive + forecasting** study with **limited causal content**. We can credibly answer "has the *environment that creates demand* for outsourced BD grown?" We cannot credibly answer "did outsourced BD spending grow by X%?" because that number is not observable.
+This is a **descriptive + forecasting** study with **limited causal content**. I can credibly answer "has the *environment that creates demand* for outsourced BD grown?" I cannot credibly answer "did outsourced BD spending grow by X%?" because that number is not observable.
 
 ---
 
@@ -22,9 +22,9 @@ This is a **descriptive + forecasting** study with **limited causal content**. W
 | # | Original question | Refined, answerable version | Type |
 |---|---|---|---|
 | RQ1 | Has outsourced GovCon BD grown over 10 years? | Have the **observable market conditions that drive demand** for outsourced BD (contractor entry, procurement complexity, tech-spend growth, search/labor interest) grown over FY2015–FY2024? | Descriptive |
-| RQ2 | What explains the growth? | Which observable factors **co-move with** our BD-demand proxies, and which have the largest standardized association in a regression? (association, not proof of cause) | Descriptive / associational |
+| RQ2 | What explains the growth? | Which observable factors **co-move with** my BD-demand proxies, and which have the largest standardized association in a regression? (association, not proof of cause) | Descriptive / associational |
 | RQ3 | Which contractor segments are most likely to buy? | Which **definable contractor segments** score highest on a transparent, theory-driven propensity framework (ACE Prospect Fit Score)? | Descriptive / decision-support |
-| RQ4 | Will demand keep growing through 2030? | Under stated assumptions, what do trend / ARIMA / ML models project for our proxies through 2030, and how wide is the uncertainty? | Forecast (conditional) |
+| RQ4 | Will demand keep growing through 2030? | Under stated assumptions, what do trend / ARIMA / ML models project for my proxies through 2030, and how wide is the uncertainty? | Forecast (conditional) |
 
 ---
 
@@ -40,7 +40,7 @@ Stated as falsifiable directional hypotheses about the **proxies**, not about un
 - **H6 (forecast).** Central-case forecasts of the composite index continue rising through 2030, though with widening confidence intervals.
 - **H7 (segmentation).** Demand propensity is concentrated in small/mid, recently-entered, single-agency-concentrated, tech-sector firms — i.e., the ACE Prospect Fit Score is not uniform across segments.
 
-Each hypothesis can be **rejected** by the data (e.g., flat or declining trend, insignificant time coefficient, negative association). We will report rejections honestly.
+Each hypothesis can be **rejected** by the data (e.g., flat or declining trend, insignificant time coefficient, negative association). I will report rejections honestly.
 
 ---
 
@@ -62,7 +62,7 @@ Each hypothesis can be **rejected** by the data (e.g., flat or declining trend, 
 
 ## 4. Proxy variables for outsourced GovCon BD demand
 
-We construct **four independent demand proxies**, then a **composite**. Independence matters: if four methodologically unrelated proxies all rise, the conclusion is far more robust than any one.
+I construct **four independent demand proxies**, then a **composite**. Independence matters: if four methodologically unrelated proxies all rise, the conclusion is far more robust than any one.
 
 | Proxy | Construction | Direction of inference | Primary weakness |
 |---|---|---|---|
@@ -70,7 +70,7 @@ We construct **four independent demand proxies**, then a **composite**. Independ
 | **P2 — Procurement-complexity index** | Composite of: share of obligations via IDIQ/GWAC/BPA/task-order; # active vehicles; # task orders; vendors-per-NAICS dispersion. | More complexity → higher capture/proposal skill premium → outsource. | Complexity rising doesn't *prove* outsourcing rises; vehicle coding in FPDS/USAspending is noisy. |
 | **P3 — Search-interest index** | Google Trends composite for "GovCon consultant", "capture consultant", "proposal consultant", "government contracting consultant", "federal business development consultant", "fractional BD". | Direct attention signal for the service category. | Google Trends is *relative* (0–100), reweighted/normalized, sample-based; low-volume terms are noisy; not a spend measure. |
 | **P4 — Tech-entry index** | Growth in IT/cyber/cloud/AI obligations × growth in *number of distinct vendors* in those PSC/NAICS codes. | Tech firms entering federal markets are prototypical outsourced-BD buyers. | PSC/NAICS tech taxonomy is fuzzy; spend growth ≠ new buyers without the vendor-count term. |
-| **Composite — BD Demand Index** | z-score normalize each of P1–P4 to a common base year, then weight (default: equal; sensitivity to PCA-derived weights). | Triangulated demand signal. | A composite can mask divergence; we always show components alongside it. |
+| **Composite — BD Demand Index** | z-score normalize each of P1–P4 to a common base year, then weight (default: equal; sensitivity to PCA-derived weights). | Triangulated demand signal. | A composite can mask divergence; I always show components alongside it. |
 
 **Explanatory (RHS) variables** (for RQ2 regressions): total real obligations, real IT obligations, # unique contractors, # new contractors, # awards, avg award size, # agencies buying in a category, vehicle-share, contractor concentration (HHI) / fragmentation, vendors-per-NAICS, tech-category dummies, Google Trends index, macro controls (GDP, federal outlays).
 
@@ -78,7 +78,7 @@ We construct **four independent demand proxies**, then a **composite**. Independ
 
 ## 5. Unit of analysis
 
-We deliberately build **multiple panels** because each RQ wants a different grain:
+I deliberately build **multiple panels** because each RQ wants a different grain:
 
 | Unit | Source feasibility | Used for |
 |---|---|---|
@@ -110,8 +110,8 @@ We deliberately build **multiple panels** because each RQ wants a different grai
 - **Clustered SEs** at the agency / NAICS level (`linearmodels.PanelOLS`, cluster_entity=True).
 - This identifies *within-agency over-time* associations, which is much stronger than raw cross-section — but still **associational**, not causal (no exogenous shock / instrument).
 
-### 6.4 What we explicitly will NOT claim
-- No claim that any X **causes** outsourced BD spending. We have no randomization, no natural experiment, no instrument that plausibly satisfies exclusion. Panel FE reduces confounding; it does not eliminate it.
+### 6.4 What I explicitly will NOT claim
+- No claim that any X **causes** outsourced BD spending. I have no randomization, no natural experiment, no instrument that plausibly satisfies exclusion. Panel FE reduces confounding; it does not eliminate it.
 - The dependent variable is a **proxy**, so even a clean coefficient is "effect on the proxy," not "effect on true BD spend."
 
 ---
@@ -123,9 +123,9 @@ We deliberately build **multiple panels** because each RQ wants a different grai
   1. Log-linear trend (interpretable baseline).
   2. ARIMA/SARIMAX (or `auto_arima`) for time-series structure.
   3. ML (RandomForest / GradientBoosting) on engineered features — used cautiously; with ~10 annual points these are **illustrative**, validated only via rolling/expanding-window backtests, and never presented as precise.
-- **Validation:** expanding-window backtest, hold out last 2–3 years, report MAE/MAPE. With ~10 annual observations we will be explicit that statistical power is low and intervals are wide.
+- **Validation:** expanding-window backtest, hold out last 2–3 years, report MAE/MAPE. With ~10 annual observations I will be explicit that statistical power is low and intervals are wide.
 - **Scenarios (Phase 8):** Conservative / Baseline / High-growth, each driven by *stated* assumptions about budget growth, tech-spend share, and entrant rates — not just mechanical extrapolation. Scenario assumptions are tabulated so a reader can disagree with the inputs.
-- **Horizon honesty:** 2030 is ~6 years out from a ~10-point annual series. We present **fan charts** with widening bands and refuse point-precision.
+- **Horizon honesty:** 2030 is ~6 years out from a ~10-point annual series. I present **fan charts** with widening bands and refuse point-precision.
 
 ---
 
@@ -139,12 +139,12 @@ The score **ranks segments** (and individual contractors if contractor-level dat
 
 ## 9. Risks & limitations (the honest list)
 
-1. **No direct DV.** The thing we care about is unobservable; all conclusions are about proxies. *This is the dominant limitation.*
+1. **No direct DV.** The thing I care about is unobservable; all conclusions are about proxies. *This is the dominant limitation.*
 2. **Proxy validity.** Each proxy can move for reasons unrelated to outsourced-BD demand (e.g., search interest rises because of news, not buying intent).
 3. **Google Trends** is relative, sampled, and unstable for low-volume queries; treat as directional only.
 4. **Small N for time series.** ~10 annual points → low power, wide forecast intervals, ML overfitting risk.
-5. **Obligations ≠ outlays ≠ outsourced-BD revenue.** We use obligations for activity; we will never call them spending received or conflate with outlays.
-6. **Fiscal vs calendar year.** Federal data is fiscal year (Oct–Sep); Google Trends/BLS are calendar. We align to fiscal year and flag every join.
+5. **Obligations ≠ outlays ≠ outsourced-BD revenue.** I use obligations for activity; I will never call them spending received or conflate with outlays.
+6. **Fiscal vs calendar year.** Federal data is fiscal year (Oct–Sep); Google Trends/BLS are calendar. I align to fiscal year and flag every join.
 7. **Recipient deduplication.** UEI/DUNS transitions, name variants, and parent/child rollups make "number of contractors" and "new entrants" approximate.
 8. **Vehicle/PSC/NAICS coding noise** in source data affects complexity and tech proxies.
 9. **Survivorship / selection.** The purest BD buyers (firms that *tried and failed* to win) are largely invisible in award data.
@@ -166,7 +166,7 @@ The score **ranks segments** (and individual contractors if contractor-level dat
 
 ---
 
-## 11. What we must not overclaim (pinned reminders)
+## 11. What I must not overclaim (pinned reminders)
 
 - Don't convert a rising proxy into a dollar market size.
 - Don't read a panel coefficient as a causal effect.

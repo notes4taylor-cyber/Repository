@@ -25,7 +25,7 @@ values.
 | 3 | **Incorrect joins** | All merges on explicit keys (`fiscal_year`, `code`); row counts logged before/after | ✅ logic verified; ⏳ values gated |
 | 4 | **Duplicate rows** | `drop_duplicates` on `(fiscal_year, series/code/group)` in `02_clean_data.py`, with before→after logging | ✅ verified |
 | 5 | **Unit-of-analysis mistakes** | Panels are explicitly national-year / agency-year / NAICS-year; never mixed in a single regression | ✅ verified |
-| 6 | **Obligations vs outlays** | We use **obligations** throughout and say so; never call them outlays or vendor revenue | ✅ verified |
+| 6 | **Obligations vs outlays** | I use **obligations** throughout and say so; never call them outlays or vendor revenue | ✅ verified |
 | 7 | **Correlation ⇒ causation** | Every regression header states "ASSOCIATIONAL ONLY"; `research_plan.md` §6.4/§10 pin this | ✅ verified |
 | 8 | **Overclaiming from weak proxies** | 4 independent proxies triangulated; composite always shown with components; weaknesses tabulated | ✅ verified |
 | 9 | **Forecasting without validation** | Expanding-window backtest (MAE/MAPE) in `06_forecasts.py`; 3 methods compared | ✅ verified |

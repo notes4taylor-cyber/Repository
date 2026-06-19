@@ -1,7 +1,7 @@
 # Data Sources — Outsourced GovCon BD Market Study
 
 **Status:** Phase 2 deliverable (documentation only; no data downloaded here).
-**Convention:** "Used in final project?" is set to **Pending** until the acquisition script (`src/01_download_data.py`) successfully pulls the series; it is updated to **Yes/No/Failed** after the run, with the failure reason logged in `quality_control.md`. This keeps us honest: a source is only "used" once it actually returns data.
+**Convention:** "Used in final project?" is set to **Pending** until the acquisition script (`src/01_download_data.py`) successfully pulls the series; it is updated to **Yes/No/Failed** after the run, with the failure reason logged in `quality_control.md`. This keeps me honest: a source is only "used" once it actually returns data.
 
 > ⚠️ **Environment note (2026-06-19):** This sandbox's network egress is allowlisted. At plan time, `api.usaspending.gov`, FRED, and Google were **blocked**. The acquisition scripts target the real endpoints below and run unmodified once these hosts are added to the environment's egress settings. Any source that cannot be reached at run time is recorded as **Failed** with the exact error, and an alternative is documented — never silently faked.
 
@@ -10,7 +10,7 @@
 ## 1. USAspending.gov API  — **PRIMARY SOURCE**
 
 - **Base URL:** `https://api.usaspending.gov/api/v2/`
-- **Auth:** None (public, no API key). Rate-limited; we add backoff + caching.
+- **Auth:** None (public, no API key). Rate-limited; I add backoff + caching.
 - **Docs:** https://api.usaspending.gov/docs/endpoints
 - **Key endpoints used:**
   | Endpoint | Method | Pulls |
@@ -21,7 +21,7 @@
   | `/search/spending_by_award/` | POST | Award-level rows (entrant detection, vehicle/IDV flags) |
   | `/bulk_download/awards/` | POST | Bulk year files when paging is too large |
 - **Variables:** obligations, award counts, recipient (UEI/name), NAICS, PSC, awarding/funding agency, award type (A/B/C/D = contracts), IDV type (IDIQ/GWAC/BPA), parent award, action date, fiscal year, set-aside / business-size flags.
-- **Years available:** FY2008→present (we use **FY2015–FY2024**, the cleaner decade).
+- **Years available:** FY2008→present (I use **FY2015–FY2024**, the cleaner decade).
 - **Why it matters:** Authoritative, reproducible federal procurement record. Source for obligations, contractor counts, new-entrant detection, complexity (vehicle shares, task orders), tech-category spend (NAICS/PSC), competition (vendors per market, HHI). It anchors **P1, P2, P4** and almost all RHS variables.
 - **Limitations:** Obligations ≠ outlays ≠ vendor revenue. Recipient dedup imperfect (UEI/DUNS transition ~2022). Vehicle/PSC coding noise. Sub-award data is separate and patchier (not used as primary).
 - **Used in final project?** **Pending → (set at run time).**
@@ -39,7 +39,7 @@
   | `A091RC1Q027SBEA` | Federal defense consumption (optional) | Defense-budget context |
 - **Years:** Multi-decade; ample coverage.
 - **Why it matters:** Real-dollar adjustment is mandatory for a credible 10-year trend; macro controls reduce omitted-variable bias in regressions.
-- **Limitations:** Needs a key; quarterly→fiscal-year aggregation required; deflator choice (GDP vs IT-specific) affects real series — we test sensitivity.
+- **Limitations:** Needs a key; quarterly→fiscal-year aggregation required; deflator choice (GDP vs IT-specific) affects real series — I test sensitivity.
 - **Used in final project?** **Pending.** *If key/host unavailable:* fall back to BEA published deflator table (manual, cited) or report nominal-only with a flagged limitation.
 
 ## 3. U.S. Census — Business Dynamics Statistics (BDS)
@@ -68,7 +68,7 @@
 - **Auth:** None; **heavily rate-limited (HTTP 429)**; may need `www.google.com` for cookies.
 - **Terms (P3 search-interest proxy):** "GovCon consultant", "capture consultant", "proposal consultant", "government contracting consultant", "federal business development consultant", "fractional BD", "proposal writer government", "capture manager".
 - **Variables:** relative search interest index (0–100), monthly, US.
-- **Years:** 2004→present (we use 2015–present, aggregated to fiscal year).
+- **Years:** 2004→present (I use 2015–present, aggregated to fiscal year).
 - **Why it matters:** The most *direct* available attention signal for the service category — independent of procurement data.
 - **Limitations:** **Relative**, sampled, re-normalized; low-volume terms noisy/unstable; not a spend measure; ToS-sensitive (read-only research use). Directional only.
 - **Used in final project?** **Pending.** *If blocked/429:* document failure; substitute term-by-term published Trends screenshots only if citable, else mark P3 unavailable and rebuild composite from P1/P2/P4 with a noted caveat.
@@ -79,12 +79,12 @@
 - **Auth/Access:** No compliant, free, historical source identified for *private-sector GovCon BD consultant* postings.
 - **Why it matters:** Would be an excellent labor-demand proxy if available.
 - **Limitations:** Scraping commercial job boards violates ToS; no clean public series.
-- **Used in final project?** **No (documented gap).** We will *not* scrape ToS-restricted sites. Recorded as a recommended internal-data collection item for ACE instead.
+- **Used in final project?** **No (documented gap).** I will *not* scrape ToS-restricted sites. Recorded as a recommended internal-data collection item for ACE instead.
 
 ## 7. SAM.gov / FPDS
 
 - **SAM.gov:** Entity registration data; public extracts at https://sam.gov/data-services. Entity API requires an approved key; bulk extracts exist but are large and licensing-flagged.
-- **FPDS:** Underlying contract-action feed (ATOM). USAspending is the cleaned, queryable superset, so **we use USAspending as the canonical front-end** and cite FPDS as the upstream.
+- **FPDS:** Underlying contract-action feed (ATOM). USAspending is the cleaned, queryable superset, so **I use USAspending as the canonical front-end** and cite FPDS as the upstream.
 - **Why it matters:** SAM registrations are a candidate entrant proxy.
 - **Limitations:** SAM registration ≠ active contractor (many register and never bid); API access friction; PII/licensing care.
 - **Used in final project?** **Pending/secondary** — USAspending first-award entry is the primary entrant proxy; SAM noted as an alternative/validation source.
