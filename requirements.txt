@@ -1,0 +1,9 @@
+# Core data-analysis stack
+# Install with: pip install -r requirements.txt
+
+pandas==3.0.3        # data analysis / DataFrames
+numpy==2.4.6         # numerical operations
+matplotlib==3.11.0   # plotting
+lets_plot==4.10.1    # grammar-of-graphics plotting
+pingouin==0.6.1      # statistical tests
+skimpy==0.0.21       # summary statistic tables
