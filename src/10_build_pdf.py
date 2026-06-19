@@ -13,7 +13,9 @@ import sys
 import textwrap
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
+import statsmodels.api as sm
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -33,20 +35,43 @@ def _csv(name):
     return pd.read_csv(p) if p.exists() else pd.DataFrame()
 
 
+def T(fig, x, y, s, **kw):
+    """fig.text that escapes '$' so matplotlib never enters math mode (which
+    would swallow dollar signs and italicize text between two '$')."""
+    return fig.text(x, y, str(s).replace("$", r"\$"), **kw)
+
+
+def math_page(pdf, title, lines):
+    """Render formulas + worked numbers in monospace (no textwrap, fixed step)."""
+    fig = plt.figure(figsize=PAGE)
+    fig.patch.set_facecolor("white")
+    T(fig, 0.08, 0.93, title, fontsize=18, fontweight="bold", color=ACE_BLUE)
+    y = 0.875
+    for ln in lines:
+        bold = len(ln) > 1 and ln[0].isdigit() and ln[1] == ")"
+        T(fig, 0.08, y, ln, fontsize=9.4, fontfamily="monospace",
+                 fontweight="bold" if bold else "normal",
+                 color=ACE_BLUE if bold else "#1a1a1a", va="top")
+        y -= 0.0268
+    T(fig, 0.08, 0.04, "ACE Business Development — Outsourced GovCon BD Market Study",
+             fontsize=7.5, color="#999999")
+    pdf.savefig(fig); plt.close(fig)
+
+
 def text_page(pdf, title, body, subtitle=None):
     fig = plt.figure(figsize=PAGE)
     fig.patch.set_facecolor("white")
-    fig.text(0.08, 0.93, title, fontsize=19, fontweight="bold", color=ACE_BLUE)
+    T(fig, 0.08, 0.93, title, fontsize=19, fontweight="bold", color=ACE_BLUE)
     if subtitle:
-        fig.text(0.08, 0.895, subtitle, fontsize=10.5, color="#555555", style="italic")
+        T(fig, 0.08, 0.895, subtitle, fontsize=10.5, color="#555555", style="italic")
     y = 0.85
     for para in body:
         wrapped = textwrap.fill(para, width=98) if not para.startswith(("•", "  ")) else para
         for line in wrapped.split("\n"):
-            fig.text(0.08, y, line, fontsize=10.5, color="#1a1a1a", va="top")
+            T(fig, 0.08, y, line, fontsize=10.5, color="#1a1a1a", va="top")
             y -= 0.022
         y -= 0.012
-    fig.text(0.08, 0.04, "ACE Business Development — Outsourced GovCon BD Market Study",
+    T(fig, 0.08, 0.04, "ACE Business Development — Outsourced GovCon BD Market Study",
              fontsize=7.5, color="#999999")
     pdf.savefig(fig); plt.close(fig)
 
@@ -54,13 +79,13 @@ def text_page(pdf, title, body, subtitle=None):
 def image_page(pdf, title, image_path, caption, table_df=None):
     fig = plt.figure(figsize=PAGE)
     fig.patch.set_facecolor("white")
-    fig.text(0.08, 0.94, title, fontsize=17, fontweight="bold", color=ACE_BLUE)
+    T(fig, 0.08, 0.94, title, fontsize=17, fontweight="bold", color=ACE_BLUE)
     if Path(image_path).exists():
         ax = fig.add_axes([0.08, 0.50, 0.84, 0.38])
         ax.imshow(mpimg.imread(image_path)); ax.axis("off")
     else:
-        fig.text(0.08, 0.7, "[chart unavailable]", fontsize=11, color="red")
-    fig.text(0.08, 0.47, caption, fontsize=9, color="#555555", style="italic")
+        T(fig, 0.08, 0.7, "[chart unavailable]", fontsize=11, color="red")
+    T(fig, 0.08, 0.47, caption, fontsize=9, color="#555555", style="italic")
     if table_df is not None and not table_df.empty:
         ax2 = fig.add_axes([0.08, 0.10, 0.84, 0.32]); ax2.axis("off")
         tbl = ax2.table(cellText=table_df.values, colLabels=table_df.columns,
@@ -93,24 +118,24 @@ def main() -> None:
         # ---- Cover ----
         fig = plt.figure(figsize=PAGE); fig.patch.set_facecolor("white")
         fig.add_axes([0, 0.62, 1, 0.02]).axis("off")
-        fig.text(0.08, 0.74, "Is Outsourced GovCon Business", fontsize=27, fontweight="bold", color=ACE_BLUE)
-        fig.text(0.08, 0.69, "Development a Growing Market?", fontsize=27, fontweight="bold", color=ACE_BLUE)
-        fig.text(0.08, 0.63, "A data-driven market-intelligence study for ACE Business Development",
+        T(fig, 0.08, 0.74, "Is Outsourced GovCon Business", fontsize=27, fontweight="bold", color=ACE_BLUE)
+        T(fig, 0.08, 0.69, "Development a Growing Market?", fontsize=27, fontweight="bold", color=ACE_BLUE)
+        T(fig, 0.08, 0.63, "A data-driven market-intelligence study for ACE Business Development",
                  fontsize=12.5, color="#444444")
-        fig.text(0.08, 0.55, f"Headline finding (real GAO data, FY2015–FY2024):", fontsize=12, fontweight="bold")
-        fig.text(0.08, 0.51, f"• Federal contract obligations grew +{grow}% over the decade "
+        T(fig, 0.08, 0.55, f"Headline finding (real GAO data, FY2015–FY2024):", fontsize=12, fontweight="bold")
+        T(fig, 0.08, 0.51, f"• Federal contract obligations grew +{grow}% over the decade "
                  f"(CAGR {cagr}%/yr, trend +{ann}%/yr, p<0.001).", fontsize=11)
-        fig.text(0.08, 0.475, f"• Baseline forecast reaches ~${f2030:.0f}B by FY2030 "
+        T(fig, 0.08, 0.475, f"• Baseline forecast reaches ~${f2030:.0f}B by FY2030 "
                  f"(range ${f2030c:.0f}B–${f2030h:.0f}B).", fontsize=11)
-        fig.text(0.08, 0.44, f"• Top ACE target segments: {top3}.", fontsize=11)
-        fig.text(0.08, 0.40, "• Outsourced-BD demand is measured via documented proxies — this is",
+        T(fig, 0.08, 0.44, f"• Top ACE target segments: {top3}.", fontsize=11)
+        T(fig, 0.08, 0.40, "• Outsourced-BD demand is measured via documented proxies — this is",
                  fontsize=11)
-        fig.text(0.095, 0.375, "descriptive/associational, not causal. See Limitations.", fontsize=11)
-        fig.text(0.08, 0.12, "Prepared by: Taylor Nguyen\n"
+        T(fig, 0.095, 0.375, "descriptive/associational, not causal. See Limitations.", fontsize=11)
+        T(fig, 0.08, 0.12, "Prepared by: Taylor Nguyen\n"
                  "Method: GAO Snapshot of Government-Wide Contracting + transparent proxy framework\n"
                  "Data provenance: data/raw/SOURCES.md   |   Reproduce: README.md",
                  fontsize=9, color="#666666")
-        fig.text(0.08, 0.05, "FY2015–FY2024 analysis · forecast to FY2030", fontsize=9, color=ACE_ORANGE)
+        T(fig, 0.08, 0.05, "FY2015–FY2024 analysis · forecast to FY2030", fontsize=9, color=ACE_ORANGE)
         pdf.savefig(fig); plt.close(fig)
 
         # ---- Executive summary ----
@@ -200,6 +225,78 @@ def main() -> None:
             "BOTTOM LINE: the FEDERAL CONTRACTING MARKET clearly grew over the decade and is projected to keep "
             "growing to 2030 — a favorable backdrop for outsourced BD. The specific size of the outsourced-BD niche "
             "remains an inference, not a measured figure, until internal ACE data or the granular pull is added.",
+            "The exact formulas and worked calculations behind every number are in the Appendix (next two pages).",
+        ])
+
+        # ---- Appendix A: the math (trend & forecast) ----
+        raw = pd.read_csv(C.DATA_RAW / "published_contract_obligations.csv").sort_values("fiscal_year")
+        yrs = raw["fiscal_year"].values
+        obl = raw["total_contract_obligations_busd"].values
+        n_span = int(yrs[-1] - yrs[0])
+        cagr_v = (obl[-1] / obl[0]) ** (1 / n_span) - 1
+        cum = (obl[-1] - obl[0]) / obl[0]
+        ly, tt = np.log(obl), yrs - yrs.min()
+        mm = sm.OLS(ly, sm.add_constant(tt)).fit(cov_type="HAC", cov_kwds={"maxlags": 1})
+        a, b = float(mm.params[0]), float(mm.params[1])
+        growth = np.exp(b) - 1
+        ci = mm.conf_int()
+        lo_ci = (np.exp(ci[1][0]) - 1) * 100
+        hi_ci = (np.exp(ci[1][1]) - 1) * 100
+        pred2030 = float(np.exp(a + b * (2030 - yrs.min())))
+        pstr = "p < 0.001" if mm.pvalues[1] < 0.001 else f"p = {mm.pvalues[1]:.3f}"
+
+        math_page(pdf, "Appendix A — The Math: Growth & Forecast", [
+            "Every value below is computed in src/09_published_data_analysis.py from the GAO series.",
+            f"Inputs:  V_start = ${obl[0]:.0f}B (FY{int(yrs[0])}),  V_end = ${obl[-1]:.0f}B "
+            f"(FY{int(yrs[-1])}),  span n = {n_span} years.",
+            "",
+            "1)  Cumulative growth",
+            f"      (V_end - V_start) / V_start  =  ({obl[-1]:.0f} - {obl[0]:.0f}) / {obl[0]:.0f}  "
+            f"=  {cum:.3f}  =  +{cum*100:.0f}%",
+            "",
+            "2)  Compound annual growth rate (CAGR)",
+            f"      (V_end / V_start)^(1/n) - 1  =  ({obl[-1]:.0f}/{obl[0]:.0f})^(1/{n_span}) - 1  "
+            f"=  {cagr_v:.3f}  =  {cagr_v*100:.1f}% / yr",
+            "",
+            "3)  Log-linear trend regression  (OLS, Newey-West HAC standard errors, 1 lag)",
+            "      Model:    ln(y_t) = a + b*t + e_t,      t = fiscal year - " + str(int(yrs.min())),
+            f"      Estimated:  a = {a:.3f},   b = {b:.4f},   R^2 = {mm.rsquared:.2f},   n = {len(yrs)}",
+            f"      Annual growth = e^b - 1 = e^({b:.4f}) - 1 = {growth*100:.1f}% / yr      ({pstr})",
+            f"      95% CI on annual growth:  [{lo_ci:.1f}% , {hi_ci:.1f}%]",
+            "",
+            "4)  Forecast - baseline path",
+            "      y_hat(T) = exp( a + b * t_T )",
+            f"      FY2030 (t = {2030-int(yrs.min())}):  y_hat = exp({a:.3f} + {b:.4f} x "
+            f"{2030-int(yrs.min())}) = ${pred2030:.0f}B",
+            "      The shaded band on the forecast chart is the 80% prediction interval from this fit.",
+            "",
+            "      (CAGR uses only the two endpoints; the regression slope uses all 9 points -",
+            "       that is why 6.2% and 6.3% differ slightly. Both are reported, honestly.)",
+        ])
+
+        # ---- Appendix B: the math (scenarios & scoring) ----
+        seg_top = seg.iloc[0]["segment"] if not seg.empty else "top segment"
+        math_page(pdf, "Appendix B — The Math: Scenarios & Scoring", [
+            "5)  Scenario paths   (h = number of years beyond FY2024; applied to the baseline trend)",
+            "      conservative(h) = y_hat(h) x 0.985^h          high-growth(h) = y_hat(h) x 1.03^h",
+            f"      FY2030 (h = 6):  conservative = {pred2030:.0f} x 0.985^6 = ${pred2030*0.985**6:.0f}B",
+            f"                       high-growth  = {pred2030:.0f} x 1.03^6  = ${pred2030*1.03**6:.0f}B",
+            "      Assumptions:  -1.5%/yr drag (CRs, flat budgets)   vs   +3%/yr (sustained cyber/AI/cloud).",
+            "",
+            "6)  ACE Prospect Fit Score   (computed in src/07_segmentation.py)",
+            "      Score = 100 x SUM( w_i * c_i ),   components c_i in [0,1],   weights w_i sum to 1",
+            "",
+            "      Weights:  market-growth .15   firm-size (smaller = higher) .15   new-entrant .15",
+            "                agency-concentration .12   tech-category .15   vehicle-complexity .10",
+            "                competitive-intensity .08   weak-internal-BD .10",
+            "",
+            f"      Worked example - '{seg_top}' (top-ranked):",
+            "        .15(.9) + .15(.6) + .15(1) + .12(.7) + .15(1) + .10(.5) + .08(.7) + .10(1)",
+            "        = .135 + .090 + .150 + .084 + .150 + .050 + .056 + .100",
+            "        = 0.815   ->   81.5 / 100",
+            "",
+            "      Each segment is scored the same way; the bar chart on page 4 ranks the results.",
+            "      The score is a transparent prioritization heuristic, NOT a trained/validated model.",
         ])
 
     log.info("PDF written -> %s", out)

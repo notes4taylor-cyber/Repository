@@ -3,7 +3,7 @@ REAL-DATA SUMMARY (GAO published figures; see data/raw/SOURCES.md)
 Total federal contract obligations:
   FY2015: $438B  ->  FY2024: $755B
   Cumulative growth: 72%   CAGR: 6.2%/yr
-  Log-linear trend: +6.3%/yr (80% CI 5.6..7.1%),
+  Log-linear trend: +6.3%/yr (95% CI 5.6..7.1%),
     p=0.0000, R^2=0.96, n=9
   => Statistically significant decade-long GROWTH in the federal contracting base.
 

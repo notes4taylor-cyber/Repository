@@ -169,7 +169,7 @@ def main() -> None:
 Total federal contract obligations:
   FY{int(df.fiscal_year.iloc[0])}: ${df.iloc[0,1]:.0f}B  ->  FY{int(df.fiscal_year.iloc[-1])}: ${df.iloc[-1,1]:.0f}B
   Cumulative growth: {total_growth*100:.0f}%   CAGR: {g*100:.1f}%/yr
-  Log-linear trend: +{tr['annual_growth_pct']:.1f}%/yr (80% CI {tr['ci_low_pct']:.1f}..{tr['ci_high_pct']:.1f}%),
+  Log-linear trend: +{tr['annual_growth_pct']:.1f}%/yr (95% CI {tr['ci_low_pct']:.1f}..{tr['ci_high_pct']:.1f}%),
     p={tr['p_value']:.4f}, R^2={tr['r2']:.2f}, n={tr['n']}
   => Statistically significant decade-long GROWTH in the federal contracting base.
 
