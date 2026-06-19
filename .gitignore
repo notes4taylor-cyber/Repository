@@ -8,6 +8,9 @@ dist
 dist-ssr
 *.local
 
+# Packaged build artifacts (e.g. the zip we hand to Netlify Drop)
+*.zip
+
 # Editor / OS
 .vscode/*
 !.vscode/extensions.json
