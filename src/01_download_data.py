@@ -69,8 +69,11 @@ def usa_category_by_year(category: str, extra_filters: dict | None = None,
         }
         if extra_filters:
             filters.update(extra_filters)
+        # Canonical form: base endpoint with `category` in the BODY (the
+        # per-category URL variant has inconsistent path names). Verified against
+        # api_contracts/.../spending_by_category.md.
         body = {"category": category, "filters": filters, "limit": limit, "page": 1}
-        data = C.http_json(f"{C.USA_BASE}/search/spending_by_category/{category}/",
+        data = C.http_json(f"{C.USA_BASE}/search/spending_by_category/",
                            "POST", body, cache_name=f"usa_{category}_{label}_{fy}")
         if not data or "results" not in data:
             log.warning("no %s results for FY%d", category, fy)
