@@ -1,0 +1,41 @@
+; Engine configuration file for "Prestige Packs"
+; Godot 4 project. Single-player fictional CCG collecting simulator.
+
+config_version=5
+
+[application]
+
+config/name="Prestige Packs"
+config/description="A single-player fictional CCG collecting simulator. First playable."
+config/version="0.1.0"
+run/main_scene="res://src/ui/Main.tscn"
+config/features=PackedStringArray("4.2", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[autoload]
+
+Balance="*res://src/core/Balance.gd"
+RNGService="*res://src/core/RNGService.gd"
+ContentDB="*res://src/core/ContentDB.gd"
+Market="*res://src/managers/Market.gd"
+PrestigeCalc="*res://src/managers/PrestigeCalc.gd"
+PackEngine="*res://src/managers/PackEngine.gd"
+Grading="*res://src/managers/Grading.gd"
+Badges="*res://src/managers/Badges.gd"
+Reputation="*res://src/managers/Reputation.gd"
+Achievements="*res://src/managers/Achievements.gd"
+Trades="*res://src/managers/Trades.gd"
+Game="*res://src/core/Game.gd"
+SaveManager="*res://src/core/SaveManager.gd"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[rendering]
+
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
