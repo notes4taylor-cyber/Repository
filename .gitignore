@@ -19,3 +19,6 @@ build/
 *.exe
 *.pck
 *.zip
+
+# Screenshot artifacts
+shots/

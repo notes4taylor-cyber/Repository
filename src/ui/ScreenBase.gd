@@ -1,8 +1,12 @@
 class_name ScreenBase
-extends Control
+extends MarginContainer
 ## Base for every in-game screen. Subclasses override build() to construct their
 ## UI once, and refresh() to update dynamic content. Main wires `main` so screens
 ## can request navigation and shared dialogs.
+##
+## Extends MarginContainer (not a plain Control) so a screen's single root child
+## is stretched to fill the content area — otherwise a trailing ScrollContainer
+## collapses to its minimum height and its contents become invisible.
 
 var main: Node = null
 var _built := false
