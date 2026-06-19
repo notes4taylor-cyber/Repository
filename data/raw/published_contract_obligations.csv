@@ -1,0 +1,10 @@
+fiscal_year,total_contract_obligations_busd,methodology,source
+2015,438.0,"Total federal contract obligations, nominal (FPDS/USAspending basis)","GAO/USAspending: ~$430B+ products & services, FY2015"
+2017,507.0,"Total federal contract obligations, nominal","GAO Snapshot FY2017 (~$507B)"
+2018,559.0,"Total federal contract obligations, nominal","GAO Snapshot FY2018 (>$550B)"
+2019,586.0,"Total federal contract obligations, nominal","GAO Snapshot FY2019 (>$586B)"
+2020,665.0,"Total federal contract obligations, nominal","GAO Snapshot FY2020 (>$665B; COVID surge)"
+2021,637.0,"Total federal contract obligations, nominal","GAO Snapshot FY2021 (~$637B)"
+2022,694.0,"Total federal contract obligations, nominal","GAO Snapshot FY2022 (about $694B)"
+2023,759.0,"Total federal contract obligations, nominal","GAO Snapshot FY2023 ($759B)"
+2024,755.0,"Total federal contract obligations, nominal","GAO Snapshot FY2024 ($755B; real decline vs FY23)"

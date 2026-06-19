@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+
+# Large / regenerable raw data (keep documentation + small cached pulls)
+data/raw/*.zip
+data/raw/*.csv.gz
+data/raw/*_bulk_*.csv
+data/raw/usaspending_bulk/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Secrets — API keys must never be committed
+.env
+secrets.json
+*_api_key.txt
+
+# Allow empty dirs to be tracked
+!**/.gitkeep

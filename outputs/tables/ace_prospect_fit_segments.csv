@@ -1,0 +1,8 @@
+segment,ace_prospect_fit_score,score_equal_weights,market_growth,small_mid_size,new_entrant,agency_concentration,tech_category,vehicle_complexity,competitive_intensity,weak_internal_bd
+Commercial tech firm entering federal,81.5,80.0,0.9,0.6,1.0,0.7,1.0,0.5,0.7,1.0
+Fast-growing cyber/AI/cloud SMB,77.6,76.2,1.0,0.8,0.6,0.6,1.0,0.6,0.8,0.7
+Recent federal entrant (any sector),70.9,70.0,0.6,0.8,1.0,0.8,0.5,0.4,0.6,0.9
+Firm chasing first GWAC/IDIQ,68.8,70.0,0.7,0.7,0.6,0.6,0.6,1.0,0.7,0.7
+"Small/mid contractor, single-agency concentrated",67.3,67.5,0.6,0.9,0.5,1.0,0.5,0.5,0.6,0.8
+"Stable niche incumbent (single agency, mature)",34.8,35.0,0.3,0.5,0.1,0.7,0.3,0.3,0.3,0.3
+Established large prime,28.3,28.7,0.4,0.1,0.1,0.3,0.5,0.4,0.4,0.1
